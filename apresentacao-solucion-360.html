@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>Elite — Solución Concesionaria 360 · Nasif Automotores</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #FF8C42;
+    --primary-hover: #FF7A24;
+    --primary-soft: rgba(255, 140, 66, 0.12);
+    --primary-glow: rgba(255, 140, 66, 0.35);
+    --bg-1: #0B0E18;
+    --bg-2: #111832;
+    --bg-3: #0F1424;
+    --surface: rgba(255, 255, 255, 0.06);
+    --surface-strong: rgba(255, 255, 255, 0.09);
+    --border: rgba(255, 255, 255, 0.12);
+    --border-strong: rgba(255, 255, 255, 0.20);
+    --fg: rgba(255, 255, 255, 0.95);
+    --fg-2: rgba(255, 255, 255, 0.78);
+    --fg-3: rgba(255, 255, 255, 0.50);
+    --success: #30D158;
+    --info: #0A84FF;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: linear-gradient(145deg, var(--bg-1) 0%, var(--bg-2) 40%, var(--bg-3) 100%);
+    background-attachment: fixed;
+    color: var(--fg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.011em;
+    line-height: 1.5;
+  }
+  .deck { width: 100%; }
+  .slide {
+    width: 100%;
+    min-height: 100vh;
+    padding: 64px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .slide-num {
+    position: absolute;
+    top: 32px;
+    right: 80px;
+    font-size: 12px;
+    color: var(--fg-3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .brand-mark {
+    position: absolute;
+    top: 32px;
+    left: 80px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .brand-mark span {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--fg);
+    letter-spacing: 0.32em;
+  }
+  .eyebrow {
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  h1 { font-size: 64px; font-weight: 700; line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; }
+  h2 { font-size: 44px; font-weight: 700; line-height: 1.1; letter-spacing: -0.025em; margin-bottom: 20px; }
+  h3 { font-size: 22px; font-weight: 600; line-height: 1.25; margin-bottom: 12px; }
+  p { color: var(--fg-2); font-size: 17px; line-height: 1.6; }
+  p.lead { font-size: 22px; color: var(--fg); line-height: 1.5; max-width: 900px; }
+  .accent { color: var(--primary); }
+  .grid { display: grid; gap: 20px; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .card {
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.15), inset 0 0.5px 0 rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+  }
+  .card.featured {
+    background: linear-gradient(135deg, rgba(255, 140, 66, 0.08), rgba(255, 140, 66, 0.02));
+    border-color: rgba(255, 140, 66, 0.3);
+  }
+  .card .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--primary-soft);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .card-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--primary-soft);
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  ul.bullets { list-style: none; padding: 0; }
+  ul.bullets li {
+    color: var(--fg-2);
+    font-size: 15px;
+    padding: 8px 0 8px 24px;
+    position: relative;
+    line-height: 1.5;
+  }
+  ul.bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+  ul.checks li::before {
+    content: '✓';
+    background: transparent;
+    color: var(--success);
+    font-weight: 700;
+    font-size: 16px;
+    top: 8px;
+  }
+  ul.crosses li::before {
+    content: '✕';
+    background: transparent;
+    color: #FF453A;
+    font-weight: 700;
+    font-size: 16px;
+    top: 8px;
+  }
+  .stat {
+    text-align: center;
+    padding: 24px;
+  }
+  .stat-num {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .stat-label {
+    color: var(--fg-3);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg-2);
+  }
+  .flow {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .flow-step {
+    flex: 1;
+    min-width: 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+  }
+  .flow-step .step-num {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--primary);
+    color: #0B0E18;
+    font-weight: 800;
+    font-size: 12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .arch {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .arch-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .arch-node {
+    flex: 1;
+    min-width: 160px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    font-size: 14px;
+  }
+  .arch-node.center {
+    background: linear-gradient(135deg, var(--primary-soft), rgba(255, 140, 66, 0.04));
+    border-color: var(--primary);
+  }
+  .arch-node strong { display: block; font-size: 15px; color: var(--fg); margin-bottom: 4px; }
+  .arch-node span { font-size: 12px; color: var(--fg-3); }
+
+  /* Cover */
+  .cover { justify-content: space-between; padding-top: 80px; padding-bottom: 80px; }
+  .cover-top { display: flex; align-items: center; gap: 16px; }
+  .cover-top span { font-size: 22px; font-weight: 800; color: var(--fg); letter-spacing: 0.36em; }
+  .cover-mid h1 { font-size: 84px; }
+  .cover-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 40px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .cover-meta .pill { background: var(--primary-soft); border-color: rgba(255, 140, 66, 0.3); color: var(--primary); font-weight: 600; }
+  .cover-bottom { color: var(--fg-3); font-size: 14px; letter-spacing: 0.06em; }
+
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 32px;
+  }
+  .quote {
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--fg);
+    border-left: 3px solid var(--primary);
+    padding-left: 24px;
+    max-width: 900px;
+  }
+  .quote-author { color: var(--fg-3); font-size: 14px; margin-top: 12px; letter-spacing: 0.06em; }
+
+  .module-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .module-badge {
+    background: var(--primary);
+    color: #0B0E18;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    letter-spacing: 0.08em;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .col-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--fg-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* Print */
+  @media print {
+    @page { size: 1280px 900px; margin: 0; }
+    html, body { background: var(--bg-1) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .slide { page-break-after: always; min-height: 900px; }
+    .slide::before { opacity: 0.25; }
+  }
+
+  @media (max-width: 900px) {
+    .slide { padding: 40px 24px; }
+    h1, .cover-mid h1 { font-size: 40px; }
+    h2 { font-size: 28px; }
+    .grid-3, .grid-4, .two-col, .kpi-row { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .brand-mark, .slide-num { left: 24px; right: 24px; top: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- 1. CAPA -->
+<section class="slide cover">
+  <div class="cover-top">
+    <span>ELITE</span>
+  </div>
+  <div class="cover-mid">
+    <div class="eyebrow">Propuesta para Nasif Automotores</div>
+    <h1>Concesionaria <span class="accent">360°</span></h1>
+    <p class="lead">Marketing, sitio propio e inteligencia artificial trabajando juntos — para que Nasif venda más, sin depender de plataformas y sin sumar gente al equipo.</p>
+    <div class="cover-meta">
+      <span class="pill">Para Nasif Automotores</span>
+      <span class="pill">Aimogasta · La Rioja</span>
+      <span class="pill">Mayo 2026</span>
+    </div>
+  </div>
+  <div class="cover-bottom">PRESENTADO POR ELITE — MARKETING + TECNOLOGÍA + IA</div>
+</section>
+
+<!-- 2. EL CONTEXTO HOY -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">02 · DIAGNÓSTICO</div>
+  <div class="eyebrow">Cómo se vende hoy en Nasif</div>
+  <h2>Tenés el negocio. Tenés la reputación. <span class="accent">Falta el motor digital</span>.</h2>
+  <p class="lead" style="margin-top: 16px;">67 reseñas en Google con 4,4 estrellas dicen algo claro: cuando un cliente entra a Nasif, la experiencia funciona. El problema no es vender — el problema es <em>llegar</em>. Hoy las ventas dependen de quién te conoce, te referencia o te ve pasando por la ruta. Eso tiene un techo.</p>
+  <div class="grid grid-3" style="margin-top: 48px;">
+    <div class="card">
+      <div class="icon">↺</div>
+      <h3>Crecimiento por boca a boca</h3>
+      <p>El cliente que te compra te recomienda a otro, y a otro. Funciona — pero solo llegás a la gente que ya está en el círculo. La que está buscando un auto en La Rioja Capital o Catamarca, ni se entera que existís.</p>
+    </div>
+    <div class="card">
+      <div class="icon">?</div>
+      <h3>Visibilidad digital incompleta</h3>
+      <p>Tu ficha de Google existe — pero le falta sitio, horario actualizado, productos completos. Quien te busca encuentra el cartel, no la vidriera. Y quien no te conoce, no aparecés en su búsqueda.</p>
+    </div>
+    <div class="card">
+      <div class="icon">↻</div>
+      <h3>Atención manual</h3>
+      <p>Consultas que llegan a las 22 hs y se contestan al otro día. Cotizaciones armadas a mano. Sin un panel para saber qué se vendió, quién atendió y qué quedó pendiente. Cada paso manual es una venta que puede no llegar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. LA OPORTUNIDAD -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">03 · VISIÓN</div>
+  <div class="eyebrow">Cómo se vería Nasif en 90 días</div>
+  <h2>Una concesionaria con <span class="accent">inteligencia propia</span>.</h2>
+  <p class="lead" style="margin-top: 16px;">Una IA entrenada con tu stock, tus condiciones de financiación y tu forma de trabajar. No es un chatbot genérico — es una empleada digital que conoce tu negocio.</p>
+  <div class="two-col" style="margin-top: 48px;">
+    <div>
+      <div class="col-label">Antes</div>
+      <ul class="bullets crosses">
+        <li>Tu stock no se ve en Google — solo lo conoce quien pasa por el playón</li>
+        <li>El cliente que escribe a la noche, espera hasta mañana</li>
+        <li>Cotizar un usado y simular cuotas lleva 30 minutos a mano</li>
+        <li>No sabés con certeza cuál vendedor convierte más</li>
+        <li>El cliente que te compró hace dos años, ya no se acuerda de Nasif</li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-label">Con la Solución 360</div>
+      <ul class="bullets checks">
+        <li>Sitio propio con todo tu stock y captación 24/7</li>
+        <li>Una IA contesta, cotiza y agenda visita — en WhatsApp y en el sitio</li>
+        <li>El cliente recibe propuesta y simulación en menos de 2 minutos</li>
+        <li>Panel en vivo: cuántos leads, quién atendió, qué se cerró, en qué tiempo</li>
+        <li>Reactivación automática de clientes pasados — vuelven a comprarte</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 4. ARQUITECTURA -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">04 · ARQUITECTURA</div>
+  <div class="eyebrow">Cómo está armado por dentro</div>
+  <h2>Una sola <span class="accent">inteligencia</span>, hablando por todos los canales.</h2>
+  <p class="lead" style="margin-top: 16px;">No son tres herramientas distintas que arman ruido. Es un solo cerebro que conoce tu stock, tus precios y tus clientes — y lo usa lo mismo si te escriben por WhatsApp, si entran al sitio o si te buscan en Google. Si un cliente empieza la conversación en el sitio y la sigue en WhatsApp, la IA recuerda todo.</p>
+  <div class="arch">
+    <div class="arch-row">
+      <div class="arch-node"><strong>Sitio Web</strong><span>Catálogo + IA</span></div>
+      <div class="arch-node"><strong>WhatsApp</strong><span>Atención 24/7</span></div>
+      <div class="arch-node"><strong>Google Ads</strong><span>Captación pago</span></div>
+      <div class="arch-node"><strong>Google Mi Negocio</strong><span>Búsqueda local</span></div>
+    </div>
+    <div class="arch-row" style="justify-content: center;">
+      <div class="arch-node center" style="flex: 0 1 480px;">
+        <strong style="font-size: 18px; color: var(--primary);">CEREBRO CENTRAL</strong>
+        <span>IA + Base de datos + Lógica de negocio</span>
+      </div>
+    </div>
+    <div class="arch-row">
+      <div class="arch-node"><strong>Stock</strong><span>Vehículos en tiempo real</span></div>
+      <div class="arch-node"><strong>CRM Vendedores</strong><span>Lead → cierre</span></div>
+      <div class="arch-node"><strong>Dashboard Dueño</strong><span>Métricas en vivo</span></div>
+      <div class="arch-node"><strong>Reactivación</strong><span>Clientes pasados</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. MÓDULO 1 — SITIO + IA -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">05 · MÓDULO 1</div>
+  <div class="module-header">
+    <div class="module-badge">CAPTACIÓN</div>
+    <span class="pill">Sitio Web + IA Unificada</span>
+  </div>
+  <h2>Tu propia vidriera, <span class="accent">abierta las 24 horas</span>.</h2>
+  <p class="lead" style="margin-top: 8px;">Un sitio web pensado para vender autos — no un folleto digital. Con una IA que acompaña al cliente mientras navega, lista para responder lo que sea.</p>
+  <div class="two-col" style="margin-top: 40px;">
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: 16px;">Qué tiene tu sitio</h3>
+      <ul class="bullets">
+        <li>Todo tu stock con fotos, precio y ficha completa</li>
+        <li>Filtros: marca, modelo, año, kilometraje, presupuesto</li>
+        <li>Botón directo a WhatsApp en cada vehículo</li>
+        <li>Asistente IA flotante en cada página</li>
+        <li>Aparece bien en celular — donde el cliente realmente busca</li>
+        <li>Optimizado para Google: cuando alguien busca un usado en La Rioja, te encuentra</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: 16px;">La IA en acción</h3>
+      <div class="card featured">
+        <p style="color: var(--fg); font-weight: 600;">Martín entra al sitio el sábado a las 22:30.</p>
+        <p style="color: var(--fg); margin-top: 8px;">Filtra "pickup hasta 15 millones". Mira tres unidades. La IA le pregunta si quiere ver opciones de financiación. Le simula 24 cuotas. Martín pregunta si toman su Ranger 2017 como parte de pago. La IA le pide datos y le devuelve un rango estimado.</p>
+        <p style="color: var(--fg); margin-top: 8px;">A las 22:48, Martín está agendando visita para el lunes — y vos te enterás cuando abrís el celular a la mañana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. MÓDULO 2 — F1 ATENCIÓN -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">06 · MÓDULO 2</div>
+  <div class="module-header">
+    <div class="module-badge">ATENCIÓN</div>
+    <span class="pill">F1 — Atención Virtual 24/7</span>
+  </div>
+  <h2>Tu mejor vendedor <span class="accent">no se cansa nunca</span>.</h2>
+  <p class="lead" style="margin-top: 8px;">Una IA conectada a tu WhatsApp que conoce el stock, los precios y las condiciones de financiación de Nasif. Atiende parejo a las 11 de la mañana o a las 2 de la madrugada.</p>
+  <div class="two-col" style="margin-top: 40px;">
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: 16px;">Qué resuelve sola</h3>
+      <ul class="bullets">
+        <li>"¿Tienen Corolla 2020?" — responde con el stock actual y las fotos</li>
+        <li>"¿Cuánto sale en 36 cuotas?" — simula al toque</li>
+        <li>"¿Aceptan parte de pago?" — explica cómo funciona y arranca la cotización</li>
+        <li>"¿Hasta qué hora atienden?" — informa horarios y dirección</li>
+        <li>Capta nombre, teléfono y modelo de interés — sin que el cliente sienta interrogatorio</li>
+        <li>Cuando el caso es complejo o caliente, pasa al vendedor con el contexto ya armado</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: 16px;">La IA en acción</h3>
+      <div class="card featured">
+        <p style="color: var(--fg); font-weight: 600;">Domingo, 23:14.</p>
+        <p style="color: var(--fg); margin-top: 8px;">Un cliente te escribe: <em>"Hola, vi una Hilux en Internet. ¿La tienen todavía?"</em></p>
+        <p style="color: var(--fg); margin-top: 8px;">La IA reconoce el modelo, confirma que está disponible, le manda las fotos, le pasa el precio y le ofrece dos opciones de financiación. Le pregunta si quiere agendar para verla mañana. El cliente dice que sí. La IA agenda 10:30 y le confirma.</p>
+        <p style="color: var(--fg); margin-top: 8px;">Vos abrís el WhatsApp el lunes y ya tenés la visita en agenda. <strong style="color: var(--primary);">Esa Hilux la vendés esta semana</strong> — sin vos te enterabas el lunes a las 9, y para entonces el cliente ya escribió a otros tres.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. MÓDULO 3 — F3 COTIZACIÓN + AVALIAÇÃO -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">07 · MÓDULO 3</div>
+  <div class="module-header">
+    <div class="module-badge">COTIZACIÓN</div>
+    <span class="pill">F3 — Cotización + Toma de Parte</span>
+  </div>
+  <h2>Cotizar un auto y <span class="accent">tasar el usado</span>, sin esperar.</h2>
+  <p class="lead" style="margin-top: 8px; max-width: 1000px;">El cliente que entrega un usado decide rápido cuando ve un número concreto. Esta IA arma esa propuesta sola — usando los precios oficiales del mercado y las reglas que vos definiste para tu negocio.</p>
+  <div class="flow" style="margin-top: 40px;">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">El cliente cuenta lo que tiene</h3>
+      <p style="font-size: 14px;">Marca, modelo, año, kilometraje. Manda fotos del usado por WhatsApp.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">La IA mira las fotos</h3>
+      <p style="font-size: 14px;">Detecta golpes visibles, estado de pintura, interior. No reemplaza al mecánico — filtra antes.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Cruza con InfoAuto</h3>
+      <p style="font-size: 14px;">Toma el precio oficial de mercado y aplica las reglas que vos definiste (kilometraje, estado, demanda).</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Arma la propuesta</h3>
+      <p style="font-size: 14px;">Rango de toma de parte + precio del auto que quiere + simulación de cuotas. Todo en menos de 2 minutos.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Agenda la inspección</h3>
+      <p style="font-size: 14px;">Aclara que el valor final lo confirma Nasif al ver el auto en persona — y agenda la visita.</p>
+    </div>
+  </div>
+  <div class="card featured" style="margin-top: 32px;">
+    <p style="color: var(--fg); font-weight: 600;">Por qué esto cambia las ventas:</p>
+    <p style="color: var(--fg); margin-top: 8px;">Hoy una conversación de toma de parte arranca un martes y termina un viernes. Llamadas, ida y vuelta, vendedor que tiene que abrir InfoAuto, calcular cuotas en planilla, mandar audio. Con la IA, el cliente recibe una propuesta concreta en lo que tarda en tomar un café — y si le cierra, ya está agendando para venir mañana.</p>
+  </div>
+</section>
+
+<!-- 8. MÓDULO 4 — A1 DASHBOARD + CRM -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">08 · MÓDULO 4</div>
+  <div class="module-header">
+    <div class="module-badge">GESTIÓN</div>
+    <span class="pill">A1 — Centro de Comando + CRM</span>
+  </div>
+  <h2>Tu negocio en <span class="accent">una sola pantalla</span>.</h2>
+  <p class="lead" style="margin-top: 8px;">Abrí el celular cuando quieras y enterate de cómo va Nasif: cuántos leads entraron, quién los está atendiendo, qué se está cerrando y qué auto está parado en el playón hace demasiado.</p>
+  <div class="grid grid-3" style="margin-top: 40px;">
+    <div class="card">
+      <div class="card-tag">TU EQUIPO</div>
+      <h3>Quién está vendiendo</h3>
+      <ul class="bullets" style="margin-top: 8px;">
+        <li>Cuántos leads recibió cada vendedor</li>
+        <li>En cuánto tiempo respondió el primer mensaje</li>
+        <li>Cuántos cerró — y cuántos perdió</li>
+        <li>Ticket promedio de cada uno</li>
+        <li>Quién está al palo y quién necesita apoyo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-tag">DE DÓNDE LLEGAN</div>
+      <h3>Qué publicidad rinde</h3>
+      <ul class="bullets" style="margin-top: 8px;">
+        <li>Google, Instagram, Facebook, búsqueda orgánica</li>
+        <li>Cuánto te cuesta cada lead</li>
+        <li>Cuánto te cuesta cada venta</li>
+        <li>Cuál pauta está rindiendo y cuál no</li>
+        <li>Por qué canal entra cada modelo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-tag">STOCK Y ALERTAS</div>
+      <h3>Qué está pasando ahora</h3>
+      <ul class="bullets" style="margin-top: 8px;">
+        <li>Cuántos días lleva cada auto en el playón</li>
+        <li>Qué modelo te consultan más</li>
+        <li>Qué modelo nadie pide</li>
+        <li>Aviso si un lead lleva más de 30 minutos sin respuesta</li>
+        <li>Aviso si un anuncio se está pasando del costo objetivo</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card featured" style="margin-top: 24px;">
+    <p style="color: var(--fg); font-weight: 600;">La pregunta de los lunes a la mañana:</p>
+    <p style="color: var(--fg); margin-top: 8px;"><em>"¿Cómo viene la semana? ¿Quién está vendiendo más? ¿La pauta de Instagram trajo gente o no?"</em></p>
+    <p style="color: var(--fg); margin-top: 8px;">Hoy esa respuesta lleva horas — pedirle planillas a cada vendedor, abrir Meta, abrir Google, juntar todo. <strong style="color: var(--primary);">Con este panel, la respuesta es la primera pantalla que ves cuando abrís el celular.</strong></p>
+  </div>
+</section>
+
+<!-- 9. MÓDULO 5 — A3 RETENCIÓN -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">09 · MÓDULO 5</div>
+  <div class="module-header">
+    <div class="module-badge">RETENCIÓN</div>
+    <span class="pill">A3 — Suite de Retención</span>
+  </div>
+  <h2>El cliente que ya te compró, <span class="accent">vuelve a comprarte</span>.</h2>
+  <p class="lead" style="margin-top: 8px;">El que cerró una operación hace dos años es la persona más fácil de venderle de nuevo. Pero si nadie le habla, se olvida — y la próxima vez compra en otro lado. La IA mantiene esa relación viva, sin que vos ni el equipo tengan que acordarse.</p>
+  <div class="two-col" style="margin-top: 40px;">
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: 16px;">Lo que la IA hace sola</h3>
+      <ul class="bullets">
+        <li><strong>Posventa:</strong> a los 7 días de la entrega, le pregunta cómo está y le pide reseña en Google</li>
+        <li><strong>Cumpleaños:</strong> saludo personalizado con un detalle que te diferencia</li>
+        <li><strong>Renovación:</strong> a los 24 meses, le tira la onda de cambiar el auto — con opciones de tu stock</li>
+        <li><strong>Reactivación:</strong> al cliente que consultó y no cerró, le vuelve a escribir cuando aparece un modelo similar al que le interesaba</li>
+        <li><strong>Recordatorios:</strong> VTV próxima a vencer, patente, seguro</li>
+      </ul>
+    </div>
+    <div>
+      <h3 style="color: var(--primary); margin-bottom: 16px;">La IA en acción</h3>
+      <div class="card featured">
+        <p style="color: var(--fg); font-weight: 600;">Juan compró un Onix en mayo de 2024.</p>
+        <p style="color: var(--fg); margin-top: 8px;">Hoy, mayo de 2026, recibe un mensaje:</p>
+        <p style="color: var(--fg); margin-top: 8px; font-style: italic;">"Hola Juan, tu Onix ya cumplió dos años con vos. ¿Sabías que con tu unidad como parte de pago podés cambiarlo por un Cronos 2023 con cuotas similares a las que pagás de seguro?"</p>
+        <p style="color: var(--fg); margin-top: 8px;"><strong style="color: var(--primary);">Esa venta hoy no existe.</strong> Nadie en Nasif tiene tiempo de revisar la base de datos cada mes y mandar mensajes uno por uno. La IA sí.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. CAPTACIÓN — TRÁFEGO PAGO + GMB -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">10 · CAPTACIÓN</div>
+  <div class="module-header">
+    <div class="module-badge">VISIBILIDAD</div>
+    <span class="pill">Google Mi Negocio + Tráfico Pagado</span>
+  </div>
+  <h2>Aparecer <span class="accent">primero</span>, donde la gente realmente busca.</h2>
+  <p class="lead" style="margin-top: 8px;">Tener el mejor sitio del mundo no sirve si nadie lo encuentra. Esta capa se encarga de que cuando alguien en La Rioja decide comprar un auto usado, Nasif sea la primera opción que ve.</p>
+  <div class="grid grid-2" style="margin-top: 40px;">
+    <div class="card">
+      <div class="card-tag">GOOGLE MI NEGOCIO</div>
+      <h3>Convertir 67 reseñas en ventas</h3>
+      <p style="margin-top: 12px;">Ya tenés 4,4 estrellas con 67 reseñas — un activo que poca competencia tiene. Pero la ficha está incompleta: sin sitio asociado, sin productos completos, con horario desactualizado. Ese cliente que te busca en Google merece encontrar todo.</p>
+      <ul class="bullets" style="margin-top: 12px;">
+        <li>Ficha completa con sitio, horarios reales y productos cargados</li>
+        <li>Posts semanales con los autos destacados del stock</li>
+        <li>Respuesta proactiva a reseñas (las buenas y las que no tanto)</li>
+        <li>Aparición en "concesionaria Aimogasta" y "autos usados La Rioja"</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-tag">PAUTA EN GOOGLE Y META</div>
+      <h3>Llegar al que está por comprar</h3>
+      <p style="margin-top: 12px;">Pauta segmentada para llegar al que ya está buscando un usado en La Rioja Capital, Aimogasta y Catamarca — antes de que llame a la competencia. Los anuncios usan las fotos de tu stock real.</p>
+      <ul class="bullets" style="margin-top: 12px;">
+        <li>Google: aparece cuando alguien busca "comprar usado La Rioja"</li>
+        <li>Performance Max: tu catálogo se muestra solo a quien tiene intención de compra</li>
+        <li>Instagram y Facebook: formularios que captan teléfono y modelo de interés</li>
+        <li>Revisión semanal: dónde rinde mejor cada peso invertido</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top: 24px; color: var(--fg-3); font-size: 14px;">El presupuesto de pauta (lo que se invierte en Google y Meta) lo manejás vos en tu cuenta. Elite arma las campañas, las optimiza semana a semana y te muestra el rendimiento.</p>
+</section>
+
+<!-- 11. RESULTADO PROYECTADO -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">11 · IMPACTO</div>
+  <div class="eyebrow">Cómo se va a sentir Nasif a los 90 días</div>
+  <h2>Menos depender de la suerte. <span class="accent">Más vender con sistema</span>.</h2>
+  <p class="lead" style="margin-top: 16px;">No se trata solo de "tener tecnología". Se trata de cambiar la forma en que se vende: que ningún cliente se quede sin respuesta, que cada lead esté trazado, y que vos sepas siempre qué está pasando.</p>
+  <div class="kpi-row">
+    <div class="card stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">Atendiendo siempre</div>
+    </div>
+    <div class="card stat">
+      <div class="stat-num">&lt; 5 min</div>
+      <div class="stat-label">Primera respuesta al lead</div>
+    </div>
+    <div class="card stat">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Leads con seguimiento</div>
+    </div>
+    <div class="card stat">
+      <div class="stat-num">+ Visibilidad</div>
+      <div class="stat-label">Aimogasta · La Rioja · Catamarca</div>
+    </div>
+  </div>
+  <div class="grid grid-3" style="margin-top: 40px;">
+    <div class="card">
+      <h3 style="color: var(--primary);">Más oportunidades</h3>
+      <p>Sitio, Google, WhatsApp e Instagram tirando leads en simultáneo. La IA no deja escapar a ninguno — ni el del domingo a la noche.</p>
+    </div>
+    <div class="card">
+      <h3 style="color: var(--primary);">Más cierres</h3>
+      <p>Respuesta inmediata, cotización en minutos, seguimiento que no se olvida. El cliente no tiene tiempo de irse a la competencia.</p>
+    </div>
+    <div class="card">
+      <h3 style="color: var(--primary);">Vos al mando</h3>
+      <p>Dejás de manejar por sensación y pasás a manejar por números. Sabés exactamente qué funciona y qué no.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12. POR QUÉ ELITE -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">12 · POR QUÉ ELITE</div>
+  <div class="eyebrow">Por qué tiene sentido hacerlo con nosotros</div>
+  <h2>No vendemos partes sueltas. <span class="accent">Construimos el sistema completo</span>.</h2>
+  <div class="grid grid-3" style="margin-top: 48px;">
+    <div class="card">
+      <div class="icon">◆</div>
+      <h3>Marketing, tecnología e IA juntos</h3>
+      <p>La mayoría de las agencias hacen pauta o redes. Nosotros además programamos, integramos y operamos. Todo conversa entre sí porque lo armamos nosotros mismos.</p>
+    </div>
+    <div class="card">
+      <div class="icon">◆</div>
+      <h3>Pensado para concesionarias</h3>
+      <p>No es una solución genérica adaptada. Cada módulo está armado con la realidad del rubro: toma de parte, financiación, stock que rota, posventa.</p>
+    </div>
+    <div class="card">
+      <div class="icon">◆</div>
+      <h3>Cerca y rápido</h3>
+      <p>Estamos en La Rioja. Cero call centers. Si hay que sentarse a charlar un sábado, nos sentamos. Si hay que probar algo nuevo, lo probamos en la semana.</p>
+    </div>
+  </div>
+  <div class="quote" style="margin-top: 56px;">
+    El cliente que espera tres horas por una cotización, ya está hablando con tu competencia. Lo que construimos elimina esas tres horas.
+    <div class="quote-author">— ELITE</div>
+  </div>
+</section>
+
+<!-- 13. PRÓXIMOS PASOS -->
+<section class="slide">
+  <div class="brand-mark"><span>ELITE</span></div>
+  <div class="slide-num">13 · PRÓXIMOS PASOS</div>
+  <div class="eyebrow">Si decidimos avanzar juntos</div>
+  <h2>De acá al lanzamiento, <span class="accent">en seis semanas</span>.</h2>
+  <div class="flow" style="margin-top: 48px;">
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Acordamos el alcance</h3>
+      <p style="font-size: 14px;">Definimos juntos qué entra y qué no, y firmamos la propuesta.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Conocemos Nasif por dentro</h3>
+      <p style="font-size: 14px;">Stock, fotos, vendedores, condiciones de financiación. Una semana de trabajo conjunto.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Construimos todo</h3>
+      <p style="font-size: 14px;">Sitio, IA, panel, integraciones. Reuniones semanales para que veas cómo va.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Salida en vivo</h3>
+      <p style="font-size: 14px;">Capacitamos al equipo, lanzamos las primeras campañas, todo arranca a funcionar.</p>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <h3 style="font-size: 16px; margin-top: 8px;">Te acompañamos siempre</h3>
+      <p style="font-size: 14px;">Mejoras semanales, reporte mensual, soporte permanente. No es un proyecto que entregamos y nos vamos.</p>
+    </div>
+  </div>
+  <div class="card featured" style="margin-top: 48px; text-align: center;">
+    <h3 style="color: var(--primary); font-size: 28px;">De números, hablamos cara a cara.</h3>
+    <p style="margin-top: 12px; font-size: 17px;">Esta presentación es el <em>qué</em> y el <em>cómo</em>. La inversión la conversamos en la próxima reunión, ajustada a lo que decidamos juntos que entra.</p>
+  </div>
+</section>
+
+<!-- 14. CIERRE -->
+<section class="slide cover">
+  <div class="cover-top">
+    <span>ELITE</span>
+  </div>
+  <div class="cover-mid">
+    <div class="eyebrow">Gracias por tu tiempo</div>
+    <h1>Construyamos juntos la <span class="accent">Nasif</span> de los próximos cinco años.</h1>
+    <p class="lead" style="margin-top: 24px;">Una concesionaria que vende sin pausa, atiende sin esperas y decide con números. Cuando estés listo, arrancamos.</p>
+    <div class="cover-meta">
+      <span class="pill">Elite · Marketing + Tecnología + IA</span>
+      <span class="pill">La Rioja · Argentina</span>
+    </div>
+  </div>
+  <div class="cover-bottom">PROPUESTA CONFIDENCIAL · NASIF AUTOMOTORES · MAYO 2026</div>
+</section>
+
+</div>
+</body>
+</html>
